@@ -1,0 +1,27 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.7</VERSION>
+ <DEVICE>"ATmega328"</DEVICE>
+ <WORKING_DIR>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\Practica4\Practica4\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\Practica4\Practica4\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m328def.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\Practica4\Practica4\Debug\Practica4.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>Practica4.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>Practica4.map</FILE>
+  <FILE>Practica4.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <start><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\Practica4\Practica4\main.asm</FILE><LINE>10</LINE></start>
+ </LABELS>
+</ASSEMBLER_INFO>
