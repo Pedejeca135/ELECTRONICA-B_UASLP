@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm Wed Feb 26 07:47:00 2020
+AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm Wed Feb 26 09:25:24 2020
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m328def.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m328def.inc'
@@ -994,14 +994,6 @@ AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-
                                   *  información guardada debe de estar disponible después de apagar y volver a prender el
                                   *	dispositivo
                                   */ 
-                                 ;
-                                 ; Practica4labo2.asm
-                                 ;
-                                 ; Created: 21/2/2020 14:49:19
-                                 ; Author : Pablo
-                                 ;
-                                 
-                                 ; Replace with your application code
 000000 e010                      LDI r17, 0x00 // se carga el registro 17 con 0´s
 000001 9310 0027                 STS $0027,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto c para configurarlos como inputs   Data direction register 
                                  
@@ -1029,9 +1021,9 @@ AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-
                                  
                                  start:
 000014 e050                      LDI r21,0x00 // bandera de control de de pila vacia
-000015 9110 0026                 LDS r17, $0026 // lectura de los 6 bits mas significativos
-000017 9120 0023                 LDS r18, $0023 // lectura de los 2 bits menos significativos
-000019 9130 0023                 LDS r19, $0023 // lectura de push buttons
+000015 9110 0023                 LDS r17, $0023 // lectura de los 6 bits mas significativos
+000017 9120 0026                 LDS r18, $0026 // lectura de los 2 bits menos significativos
+000019 9130 0026                 LDS r19, $0026 // lectura de push buttons
                                  
 00001b fd34                      SBRC r19,4 //  checa si el bit 4 del registro 19 esta en alto
 00001c 940c 005a                 JMP reset //
@@ -1066,7 +1058,7 @@ AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-
                                   // ------------------------------------------------------------------
                                   // ------------------------------------------------------------------
                                     rompe: 
-000035 9130 0023                    LDS r19, $0023 // obtiene los valores de entrada en el puerto B
+000035 9130 0026                    LDS r19, $0026 // obtiene los valores de entrada en el puerto B
 000037 713c                         ANDI r19, 0b0001_1100 // enmascara para solamente ver los bits de push y pop
 000038 3030                         CPI r19, 0x00 // Compara si ya se dejaron de aplanar
 000039 f2d1                         BREQ start // Si sí, salta al inicio  

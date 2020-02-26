@@ -10,8 +10,6 @@
  *  información guardada debe de estar disponible después de apagar y volver a prender el
  *	dispositivo
  */ 
-
-; Replace with your application code
 LDI r17, 0x00 // se carga el registro 17 con 0´s
 STS $0027,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto c para configurarlos como inputs   Data direction register 
 
