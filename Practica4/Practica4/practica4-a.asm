@@ -16,7 +16,7 @@
 	ingresado. (Los valores dentro del programa se manejarán en hexadecimal).
  */ 
 
- LDI r17, 0x00 // se carga el registro 17 con 0´s
+LDI r17, 0x00 // se carga el registro 17 con 0´s
 STS $0027,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto c para configurarlos como inputs   Data direction register 
 
 STS $0024,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto b para configurarlos como inputs
@@ -29,13 +29,16 @@ LDI r27, 0x01 // parte de la direccion en alto para x
 
 LDI r28, 0x55 // es la parte de la direccion en bajo para y
 LDI r29, 0x01 //parte de la direccion en alto para y
+
 LDI r22, 0xFF// para prender todos los leds
+
 start:
 
 LDI r21,0x00 // bandera de control de de pila vacia
-LDS r17, $0026 // lectura de los 6 bits mas significativos
-LDS r18, $0023 // lectura de los 2 bits menos significativos
-LDS r19, $0023 // lectura de push buttons
+
+LDS r17, $0023 // lectura de los 6 bits mas significativos
+LDS r18, $0026 // lectura de los 2 bits menos significativos
+LDS r19, $0026 // lectura de push buttons
 
 LSL r17 // desplazamiento a la izquierda del registro 17
 LSL r17 // segundo desplazamiento a la izquierda del registro 17
@@ -74,7 +77,7 @@ comp:
   JMP rompe // salto a etiqueta
 
   rompe: 
-   LDS r19, $0023 // obtiene los valores de entrada en el puerto B
+   LDS r19, $0026 // obtiene los valores de entrada en el puerto C
    ANDI r19, 0b0000_1100 // enmascara para solamente ver los bits de push y pop
    CPI r19, 0x00 // Compara si ya se dejaron de aplanar
    BREQ start // Si sí, salta al inicio  
