@@ -26,30 +26,31 @@ STS $0024,r17 // se asigna el valor del registro a una direccion de memoria del 
 LDI r18,0xFF // se carga el registro 18 con 1´s
 STS $002A, r18 // se asigna el valor del registro 18 al puerto D para configurarlos como outputs
 
-OUT EEARL, r17
-OUT EEARH, r17
+OUT EEARL, r17 // actualiza en el registro de direccion de bajo de la EEPROM
+OUT EEARH, r17 // actualiza en el registro de direccion de alto de la EEPROM
 
-LDI r17, 0x01
-SBI EECR,EERE
-IN r26,EEDR
-OUT EEARL, r17
-SBI EECR,EERE
-IN r27, EEDR
+LDI r17, 0x01 // carga a registro de 1
+SBI EECR,EERE // pone un 1 en en el bit de habilitacion de lectura al registro de control de la EEPROM
+IN r26,EEDR // pone en un registro el valor que leyó de la EEPROM
+OUT EEARL, r17 // actualiza en el registro de direccion de bajo de la EEPROM
+SBI EECR,EERE // pone un 1 en en el bit de habilitacion de lectura al registro de control de la EEPROM
+IN r27, EEDR // pone en un registro el valor que leyó de la EEPROM
 
-LDI r28, 0x02
-LDI r29, 0x00
+LDI r28, 0x02 // actualiza el registro de direccion bajo de Y en la posicion inicial de la pila en la EEPROM
+LDI r29, 0x00 // actualiza el registro de direccion alto de Y en la posicion inicial de la pila en la EEPROM
 
 
 LDI r22, 0xFF// para prender todos los leds cuando pila esta vacia
 LDI r24, 0x26 // pone palabra de control para escritura en un registro
+
 start:
 LDI r21,0x00 // bandera de control de de pila vacia
 LDS r17, $0026 // lectura de los 6 bits mas significativos
 LDS r18, $0023 // lectura de los 2 bits menos significativos
 LDS r19, $0023 // lectura de push buttons
 
-SBRC r19,4
-JMP reset
+SBRC r19,4 //  checa si el bit 4 del registro 19 esta en alto
+JMP reset //
 
 LSL r17 // desplazamiento a la izquierda del registro 17
 LSL r17 // segundo desplazamiento a la izquierda del registro 17
@@ -90,72 +91,79 @@ comp:
  poping:
  CPI r21,0xFF // comparacion de bandera para aver si la pila esta vacia
  BREQ start // Si sí, salta a inicio 
-  
-  CPI r26, 0x00
-  BREQ carry_invertido
-  DEC r26
-continua_poping:
- 
- STS EEARH, r27 // actualiza la direccion de la EEPROM en alto con x
- STS EEARL, r26 // actualiza la direccion de la EEPROM en bajo con x
 
- LDI r20, 0x10
- STS EECR, r20
- LDS r20, $0040
- STS $002B,r20 // muestra en puerto D el valor obtenido del pop
+ 
+  CPI r26, 0x00 // compara el registro 26 con 0s 
+  BREQ carry_invertido // salto a etiqueta
+  DEC r26 // decrementa el valor del registro 26
+continua_poping:
+  write8: //  ciclo para que termine la escritura en la EEPROM
+    SBIC EECR,EEPE 
+	rjmp write8
+
+ OUT EEARH, r27 // actualiza la direccion de la EEPROM en alto con x
+ OUT EEARL, r26 // actualiza la direccion de la EEPROM en bajo con x
+
+
+ SBI EECR,EERE // pone un 1 en en el bit de habilitacion de lectura al registro de control de la EEPROM
+ IN r17,EEDR  // pone en un registro el valor que leyó de la EEPROM
+
+ STS $002B,r17 // muestra en puerto D el valor obtenido del pop
  
  
  JMP sp_eeprom // salto a etiqueta
-//------------------------------------------------------------------
+
  pushing:
-  SBIC EECR,EEPE
-   rjmp pushing
+ LDI r20,0x00
+ STS $002B, r20
+  write7:  //  ciclo para que termine la escritura en la EEPROM
+    SBIC EECR,EEPE
+	rjmp write7
 
    OUT EEARH, r27 // actualiza la direccion de la EEPROM en alto con x
    OUT EEARL, r26 // actualiza la direccion de la EEPROM en bajo con x
-
    OUT EEDR,r17 // pone el dato en el registro de datos de la EEPROM
-   SBI EECR, EEMPE
-   //STS EECR,r24 // Escribe lo que hay en EEDR en la direccion de memoria que tiene EEARH y EEARL
-   SBI EECR, EEPE 
 
-   CPI r26, 0xFF
-   BREQ carry
-   INC r26
+   SBI EECR, EEMPE // habilita el bit maestro de escritura
+   SBI EECR, EEPE  // habilita la escritura
+   
+   CPI r26, 0xFF // compara si r26 tiene puros 1´s
+   BREQ carry // si si, salta a etiqueta
+   INC r26 // incrementa r26
 
-   JMP sp_eeprom
-
-   //////////////////////////////
+   JMP sp_eeprom // salto a etiqueta
 
 
-//---------------------------------------------------------------------------
  
  reset:
    LDI r25, 0x00 // pone en 0's r25
    LDI r18, 0x01 // pone un 1 en r18
-   LDI r24, 0x04
-   LDI r23, 0x02
+   LDI r24, 0x04 // pone un 4 en el registro 24
+   LDI r23, 0x02 // pone un 2 en el registro 23
 
-   write:
-   SBIC EECR,EEPE
-   rjmp write
-   OUT EEARH,r25
-   OUT EEARL,r25
-   OUT EEDR,r23
-   SBI EECR,EEPM1
-   CBI EECR,EEPM0
-   SBI EECR, EEMPE
-   SBI EECR, EEPE    
+   write:   //  ciclo para que termine la escritura en la EEPROM
+    SBIC EECR,EEPE 
+	rjmp write 
 
- write2:
-   SBIC EECR,EEPE
-   rjmp write2
+   OUT EEARH,r25 // actualiza la direccion alta de la EEPROM
+   OUT EEARL,r25 //  actualiza la direccion baja de la EEPROM
+   OUT EEDR,r23 // Le pasa el dato de r23 al registro EEDR
+   SBI EECR, EEMPE // Setea en 1 el bit EEMPE en el registro EECR
+   SBI EECR, EEPE  // Setea en 1 el bit EEPE en el registro EECR
+    
+    write2:  //  ciclo para que termine la escritura en la EEPROM
+    SBIC EECR,EEPE
+	rjmp write2
+   
+   OUT EEARH,r25 // actualiza la direccion alta de la EEPROM
+   OUT EEARL,r18 //  actualiza la direccion baja de la EEPROM
+   OUT EEDR,r25 // Le pasa el dato de r25 al registro EEDR
+   SBI EECR, EEMPE // Setea en 1 el bit EEMPE en el registro EECR
+   SBI EECR, EEPE // Setea en 1 el bit EEPE en el registro EECR
 
-   OUT EEARH,r25
-   OUT EEARL,r18
-   OUT EEDR,r25
-   SBI EECR, EEMPE
-   SBI EECR, EEPE 
+    write5:  //  ciclo para que termine la escritura en la EEPROM
+    SBIC EECR,EEPE
+	rjmp write5
 
   OUT EEARL, r25
   OUT EEARH, r25
@@ -163,11 +171,17 @@ continua_poping:
   LDI r17, 0x01
   SBI EECR,EERE
   IN r26,EEDR
+
+   write6:  //  ciclo para que termine la escritura en la EEPROM
+    SBIC EECR,EEPE
+	rjmp write6
+
   OUT EEARL, r17
   SBI EECR,EERE
   IN r27, EEDR
-  JMP rompe
 
+
+   JMP rompe
       carry_invertido:
       DEC r27
 	  LDI r26, 0xFF
@@ -178,17 +192,27 @@ continua_poping:
 	LDI r26, 0x00
 	JMP sp_eeprom
 
-   sp_eeprom:
+   sp_eeprom: // actualiza el valor de las direcciones en la EEPROM para cuando se apague y se prenda
    LDI r25, 0x00 // pone en 0's r25
    LDI r18, 0x01 // pone un 1 en r18
 
-   STS EEARH, r25 
-   STS EEARL, r25
-   STS EEDR, r26
-   STS $003F, r24
+      write3:  //  ciclo para que termine la escritura en la EEPROM
+    SBIC EECR,EEPE
+	rjmp write3
+
+   OUT EEARH, r25 
+   OUT EEARL, r25
+   OUT EEDR, r26
+   SBI EECR, EEMPE
+   SBI EECR, EEPE 
+
+      write4:  //  ciclo para que termine la escritura en la EEPROM
+    SBIC EECR,EEPE
+	rjmp write4
    
-   STS EEARH, r25
-   STS EEARL, r18
-   STS $0040, r27
-   STS $003F, r24
+   OUT EEARH, r25
+   OUT EEARL, r18
+   OUT EEDR, r27
+   SBI EECR, EEMPE
+   SBI EECR, EEPE 
    JMP rompe
