@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm Tue Feb 25 21:34:42 2020
+AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm Wed Feb 26 07:47:00 2020
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m328def.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m328def.inc'
@@ -1010,30 +1010,31 @@ AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-
 000005 ef2f                      LDI r18,0xFF // se carga el registro 18 con 1´s
 000006 9320 002a                 STS $002A, r18 // se asigna el valor del registro 18 al puerto D para configurarlos como outputs
                                  
-000008 bd11                      OUT EEARL, r17
-000009 bd12                      OUT EEARH, r17
+000008 bd11                      OUT EEARL, r17 // actualiza en el registro de direccion de bajo de la EEPROM
+000009 bd12                      OUT EEARH, r17 // actualiza en el registro de direccion de alto de la EEPROM
                                  
-00000a e011                      LDI r17, 0x01
-00000b 9af8                      SBI EECR,EERE
-00000c b5a0                      IN r26,EEDR
-00000d bd11                      OUT EEARL, r17
-00000e 9af8                      SBI EECR,EERE
-00000f b5b0                      IN r27, EEDR
+00000a e011                      LDI r17, 0x01 // carga a registro de 1
+00000b 9af8                      SBI EECR,EERE // pone un 1 en en el bit de habilitacion de lectura al registro de control de la EEPROM
+00000c b5a0                      IN r26,EEDR // pone en un registro el valor que leyó de la EEPROM
+00000d bd11                      OUT EEARL, r17 // actualiza en el registro de direccion de bajo de la EEPROM
+00000e 9af8                      SBI EECR,EERE // pone un 1 en en el bit de habilitacion de lectura al registro de control de la EEPROM
+00000f b5b0                      IN r27, EEDR // pone en un registro el valor que leyó de la EEPROM
                                  
-000010 e0c2                      LDI r28, 0x02
-000011 e0d0                      LDI r29, 0x00
+000010 e0c2                      LDI r28, 0x02 // actualiza el registro de direccion bajo de Y en la posicion inicial de la pila en la EEPROM
+000011 e0d0                      LDI r29, 0x00 // actualiza el registro de direccion alto de Y en la posicion inicial de la pila en la EEPROM
                                  
                                  
 000012 ef6f                      LDI r22, 0xFF// para prender todos los leds cuando pila esta vacia
 000013 e286                      LDI r24, 0x26 // pone palabra de control para escritura en un registro
+                                 
                                  start:
 000014 e050                      LDI r21,0x00 // bandera de control de de pila vacia
 000015 9110 0026                 LDS r17, $0026 // lectura de los 6 bits mas significativos
 000017 9120 0023                 LDS r18, $0023 // lectura de los 2 bits menos significativos
 000019 9130 0023                 LDS r19, $0023 // lectura de push buttons
                                  
-00001b fd34                      SBRC r19,4
-00001c 940c 005a                 JMP reset
+00001b fd34                      SBRC r19,4 //  checa si el bit 4 del registro 19 esta en alto
+00001c 940c 005a                 JMP reset //
                                  
 00001e 0f11                      LSL r17 // desplazamiento a la izquierda del registro 17
 00001f 0f11                      LSL r17 // segundo desplazamiento a la izquierda del registro 17
@@ -1058,7 +1059,7 @@ AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-
 00002d fd32                       SBRC r19,2 // indica si en el bit 2 del r19 esta en alto (pop)
 00002e 940c 003c                  JMP poping // salta 
 000030 fd33                       SBRC r19,3 // indica si en el bit 3 del r19 esta en alto (push)
-000031 940c 004e                  JMP pushing // salta
+000031 940c 004b                  JMP pushing // salta
 000033 940c 0014                  JMP start // salto a inicio
                                  
                                   // ------------------------------------------------------------------
@@ -1074,72 +1075,79 @@ AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-
                                   poping:
 00003c 3f5f                       CPI r21,0xFF // comparacion de bandera para aver si la pila esta vacia
 00003d f2b1                       BREQ start // Si sí, salta a inicio 
-                                   
-00003e 30a0                        CPI r26, 0x00
-00003f f1c1                        BREQ carry_invertido
-000040 95aa                        DEC r26
-                                 continua_poping:
-                                  
-000041 93b0 0022                  STS EEARH, r27 // actualiza la direccion de la EEPROM en alto con x
-000043 93a0 0021                  STS EEARL, r26 // actualiza la direccion de la EEPROM en bajo con x
                                  
-000045 e140                       LDI r20, 0x10
-000046 9340 001f                  STS EECR, r20
-000048 9140 0040                  LDS r20, $0040
-00004a 9340 002b                  STS $002B,r20 // muestra en puerto D el valor obtenido del pop
+                                  
+00003e 30a0                        CPI r26, 0x00 // compara el registro 26 con 0s 
+00003f f1d1                        BREQ carry_invertido // salto a etiqueta
+000040 95aa                        DEC r26 // decrementa el valor del registro 26
+                                 continua_poping:
+                                   write8: //  ciclo para que termine la escritura en la EEPROM
+000041 99f9                          SBIC EECR,EEPE 
+000042 cffe                      	rjmp write8
+                                 
+000043 bdb2                       OUT EEARH, r27 // actualiza la direccion de la EEPROM en alto con x
+000044 bda1                       OUT EEARL, r26 // actualiza la direccion de la EEPROM en bajo con x
+                                 
+                                 
+000045 9af8                       SBI EECR,EERE // pone un 1 en en el bit de habilitacion de lectura al registro de control de la EEPROM
+000046 b510                       IN r17,EEDR  // pone en un registro el valor que leyó de la EEPROM
+                                 
+000047 9310 002b                  STS $002B,r17 // muestra en puerto D el valor obtenido del pop
                                   
                                   
-00004c 940c 0080                  JMP sp_eeprom // salto a etiqueta
-                                 //------------------------------------------------------------------
+000049 940c 0082                  JMP sp_eeprom // salto a etiqueta
+                                 
                                   pushing:
-00004e 99f9                        SBIC EECR,EEPE
-00004f cffe                         rjmp pushing
+00004b e040                       LDI r20,0x00
+00004c 9340 002b                  STS $002B, r20
+                                   write7:  //  ciclo para que termine la escritura en la EEPROM
+00004e 99f9                          SBIC EECR,EEPE
+00004f cffe                      	rjmp write7
                                  
 000050 bdb2                         OUT EEARH, r27 // actualiza la direccion de la EEPROM en alto con x
 000051 bda1                         OUT EEARL, r26 // actualiza la direccion de la EEPROM en bajo con x
-                                 
 000052 bd10                         OUT EEDR,r17 // pone el dato en el registro de datos de la EEPROM
-000053 9afa                         SBI EECR, EEMPE
-                                    //STS EECR,r24 // Escribe lo que hay en EEDR en la direccion de memoria que tiene EEARH y EEARL
-000054 9af9                         SBI EECR, EEPE 
                                  
-000055 3faf                         CPI r26, 0xFF
-000056 f129                         BREQ carry
-000057 95a3                         INC r26
+000053 9afa                         SBI EECR, EEMPE // habilita el bit maestro de escritura
+000054 9af9                         SBI EECR, EEPE  // habilita la escritura
+                                    
+000055 3faf                         CPI r26, 0xFF // compara si r26 tiene puros 1´s
+000056 f139                         BREQ carry // si si, salta a etiqueta
+000057 95a3                         INC r26 // incrementa r26
                                  
-000058 940c 0080                    JMP sp_eeprom
-                                 
-                                    //////////////////////////////
+000058 940c 0082                    JMP sp_eeprom // salto a etiqueta
                                  
                                  
-                                 //---------------------------------------------------------------------------
                                   
                                   reset:
 00005a e090                         LDI r25, 0x00 // pone en 0's r25
 00005b e021                         LDI r18, 0x01 // pone un 1 en r18
-00005c e084                         LDI r24, 0x04
-00005d e072                         LDI r23, 0x02
+00005c e084                         LDI r24, 0x04 // pone un 4 en el registro 24
+00005d e072                         LDI r23, 0x02 // pone un 2 en el registro 23
                                  
-                                    write:
-00005e 99f9                         SBIC EECR,EEPE
-00005f cffe                         rjmp write
-000060 bd92                         OUT EEARH,r25
-000061 bd91                         OUT EEARL,r25
-000062 bd70                         OUT EEDR,r23
-000063 9afd                         SBI EECR,EEPM1
-000064 98fc                         CBI EECR,EEPM0
-000065 9afa                         SBI EECR, EEMPE
-000066 9af9                         SBI EECR, EEPE    
+                                    write:   //  ciclo para que termine la escritura en la EEPROM
+00005e 99f9                          SBIC EECR,EEPE 
+00005f cffe                      	rjmp write 
                                  
-                                  write2:
-000067 99f9                         SBIC EECR,EEPE
-000068 cffe                         rjmp write2
+000060 bd92                         OUT EEARH,r25 // actualiza la direccion alta de la EEPROM
+000061 bd91                         OUT EEARL,r25 //  actualiza la direccion baja de la EEPROM
+000062 bd70                         OUT EEDR,r23 // Le pasa el dato de r23 al registro EEDR
+000063 9afa                         SBI EECR, EEMPE // Setea en 1 el bit EEMPE en el registro EECR
+000064 9af9                         SBI EECR, EEPE  // Setea en 1 el bit EEPE en el registro EECR
+                                     
+                                     write2:  //  ciclo para que termine la escritura en la EEPROM
+000065 99f9                          SBIC EECR,EEPE
+000066 cffe                      	rjmp write2
+                                    
+000067 bd92                         OUT EEARH,r25 // actualiza la direccion alta de la EEPROM
+000068 bd21                         OUT EEARL,r18 //  actualiza la direccion baja de la EEPROM
+000069 bd90                         OUT EEDR,r25 // Le pasa el dato de r25 al registro EEDR
+00006a 9afa                         SBI EECR, EEMPE // Setea en 1 el bit EEMPE en el registro EECR
+00006b 9af9                         SBI EECR, EEPE // Setea en 1 el bit EEPE en el registro EECR
                                  
-000069 bd92                         OUT EEARH,r25
-00006a bd21                         OUT EEARL,r18
-00006b bd90                         OUT EEDR,r25
-00006c 9afa                         SBI EECR, EEMPE
-00006d 9af9                         SBI EECR, EEPE 
+                                     write5:  //  ciclo para que termine la escritura en la EEPROM
+00006c 99f9                          SBIC EECR,EEPE
+00006d cffe                      	rjmp write5
                                  
 00006e bd91                        OUT EEARL, r25
 00006f bd92                        OUT EEARH, r25
@@ -1147,34 +1155,50 @@ AVRASM ver. 2.2.7  C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-
 000070 e011                        LDI r17, 0x01
 000071 9af8                        SBI EECR,EERE
 000072 b5a0                        IN r26,EEDR
-000073 bd11                        OUT EEARL, r17
-000074 9af8                        SBI EECR,EERE
-000075 b5b0                        IN r27, EEDR
-000076 940c 0035                   JMP rompe
                                  
+                                    write6:  //  ciclo para que termine la escritura en la EEPROM
+000073 99f9                          SBIC EECR,EEPE
+000074 cffe                      	rjmp write6
+                                 
+000075 bd11                        OUT EEARL, r17
+000076 9af8                        SBI EECR,EERE
+000077 b5b0                        IN r27, EEDR
+                                 
+                                 
+000078 940c 0035                    JMP rompe
                                        carry_invertido:
-000078 95ba                            DEC r27
-000079 efaf                      	  LDI r26, 0xFF
-00007a 940c 0041                 	  JMP continua_poping
+00007a 95ba                            DEC r27
+00007b efaf                      	  LDI r26, 0xFF
+00007c 940c 0041                 	  JMP continua_poping
                                  
                                     carry: 
-00007c 95b3                          INC r27
-00007d e0a0                      	LDI r26, 0x00
-00007e 940c 0080                 	JMP sp_eeprom
+00007e 95b3                          INC r27
+00007f e0a0                      	LDI r26, 0x00
+000080 940c 0082                 	JMP sp_eeprom
                                  
-                                    sp_eeprom:
-000080 e090                         LDI r25, 0x00 // pone en 0's r25
-000081 e021                         LDI r18, 0x01 // pone un 1 en r18
+                                    sp_eeprom: // actualiza el valor de las direcciones en la EEPROM para cuando se apague y se prenda
+000082 e090                         LDI r25, 0x00 // pone en 0's r25
+000083 e021                         LDI r18, 0x01 // pone un 1 en r18
                                  
-000082 9390 0022                    STS EEARH, r25 
-000084 9390 0021                    STS EEARL, r25
-000086 93a0 0020                    STS EEDR, r26
-000088 9380 003f                    STS $003F, r24
+                                       write3:  //  ciclo para que termine la escritura en la EEPROM
+000084 99f9                          SBIC EECR,EEPE
+000085 cffe                      	rjmp write3
+                                 
+000086 bd92                         OUT EEARH, r25 
+000087 bd91                         OUT EEARL, r25
+000088 bda0                         OUT EEDR, r26
+000089 9afa                         SBI EECR, EEMPE
+00008a 9af9                         SBI EECR, EEPE 
+                                 
+                                       write4:  //  ciclo para que termine la escritura en la EEPROM
+00008b 99f9                          SBIC EECR,EEPE
+00008c cffe                      	rjmp write4
                                     
-00008a 9390 0022                    STS EEARH, r25
-00008c 9320 0021                    STS EEARL, r18
-00008e 93b0 0040                    STS $0040, r27
-000090 9380 003f                    STS $003F, r24
+00008d bd92                         OUT EEARH, r25
+00008e bd21                         OUT EEARL, r18
+00008f bdb0                         OUT EEDR, r27
+000090 9afa                         SBI EECR, EEMPE
+000091 9af9                         SBI EECR, EEPE 
 000092 940c 0035                    JMP rompe
 
 
@@ -1195,8 +1219,8 @@ counted separately from r26..r31 here.
 "ATmega328" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:   0 r17:  14 r18:   9 r19:   7 r20:   4 
-r21:   3 r22:   2 r23:   2 r24:   4 r25:  11 r26:  12 r27:   8 r28:   2 
+r13:   0 r14:   0 r15:   0 r16:   0 r17:  16 r18:   9 r19:   7 r20:   2 
+r21:   3 r22:   2 r23:   2 r24:   2 r25:  11 r26:  12 r27:   8 r28:   2 
 r29:   2 r30:   0 r31:   0 
 Registers used: 13 out of 35 (37.1%)
 
@@ -1206,21 +1230,21 @@ andi  :   2 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0
 brcc  :   0 brcs  :   0 break :   0 breq  :   6 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
 brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   1 cbr   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 cpc   :   0 
 cpi   :   4 cpse  :   0 dec   :   2 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   4 inc   :   2 jmp   :  13 
-ld    :   0 ldd   :   0 ldi   :  19 lds   :   5 lpm   :   0 lsl   :   2 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   5 inc   :   2 jmp   :  13 
+ld    :   0 ldd   :   0 ldi   :  19 lds   :   4 lpm   :   0 lsl   :   2 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  15 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   3 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :  11 sbic  :   3 sbis  :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :  23 pop   :   0 
+push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   8 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :  15 sbic  :   8 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   3 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :  16 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   6 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 19 out of 113 (16.8%)
+Instructions used: 18 out of 113 (15.9%)
 
 "ATmega328" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%

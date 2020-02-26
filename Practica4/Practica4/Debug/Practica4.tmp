@@ -22,19 +22,25 @@
   <FILE>Practica4.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <start><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>45</LINE></start>
-  <reset><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>133</LINE></reset>
-  <comp><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>64</LINE></comp>
-  <Operacion_pila><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>73</LINE></Operacion_pila>
-  <prende_leds><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>69</LINE></prende_leds>
-  <poping><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>90</LINE></poping>
-  <pushing><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>110</LINE></pushing>
-  <rompe><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>83</LINE></rompe>
-  <carry_invertido><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>171</LINE></carry_invertido>
-  <continua_poping><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>97</LINE></continua_poping>
-  <sp_eeprom><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>181</LINE></sp_eeprom>
-  <carry><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>176</LINE></carry>
-  <write><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>139</LINE></write>
-  <write2><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>150</LINE></write2>
+  <start><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>46</LINE></start>
+  <reset><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>138</LINE></reset>
+  <comp><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>65</LINE></comp>
+  <Operacion_pila><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>74</LINE></Operacion_pila>
+  <prende_leds><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>70</LINE></prende_leds>
+  <poping><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>91</LINE></poping>
+  <pushing><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>116</LINE></pushing>
+  <rompe><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>84</LINE></rompe>
+  <carry_invertido><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>185</LINE></carry_invertido>
+  <continua_poping><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>99</LINE></continua_poping>
+  <write8><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>100</LINE></write8>
+  <sp_eeprom><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>195</LINE></sp_eeprom>
+  <write7><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>119</LINE></write7>
+  <carry><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>190</LINE></carry>
+  <write><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>144</LINE></write>
+  <write2><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>154</LINE></write2>
+  <write5><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>164</LINE></write5>
+  <write6><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>175</LINE></write6>
+  <write3><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>199</LINE></write3>
+  <write4><FILE>C:\Users\pjco9\Documents\UASLP-2020\laboElectroB\ELECTRONICA-B_UASLP\Practica4\Practica4\practica4-b.asm</FILE><LINE>209</LINE></write4>
  </LABELS>
 </ASSEMBLER_INFO>

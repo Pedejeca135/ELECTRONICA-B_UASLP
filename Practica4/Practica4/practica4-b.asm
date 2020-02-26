@@ -10,12 +10,6 @@
  *  información guardada debe de estar disponible después de apagar y volver a prender el
  *	dispositivo
  */ 
-;
-; Practica4labo2.asm
-;
-; Created: 21/2/2020 14:49:19
-; Author : Pablo
-;
 
 ; Replace with your application code
 LDI r17, 0x00 // se carga el registro 17 con 0´s
@@ -45,9 +39,9 @@ LDI r24, 0x26 // pone palabra de control para escritura en un registro
 
 start:
 LDI r21,0x00 // bandera de control de de pila vacia
-LDS r17, $0026 // lectura de los 6 bits mas significativos
-LDS r18, $0023 // lectura de los 2 bits menos significativos
-LDS r19, $0023 // lectura de push buttons
+LDS r17, $0023 // lectura de los 6 bits mas significativos
+LDS r18, $0026 // lectura de los 2 bits menos significativos
+LDS r19, $0026 // lectura de push buttons
 
 SBRC r19,4 //  checa si el bit 4 del registro 19 esta en alto
 JMP reset //
@@ -82,7 +76,7 @@ comp:
  // ------------------------------------------------------------------
  // ------------------------------------------------------------------
    rompe: 
-   LDS r19, $0023 // obtiene los valores de entrada en el puerto B
+   LDS r19, $0026 // obtiene los valores de entrada en el puerto B
    ANDI r19, 0b0001_1100 // enmascara para solamente ver los bits de push y pop
    CPI r19, 0x00 // Compara si ya se dejaron de aplanar
    BREQ start // Si sí, salta al inicio  
