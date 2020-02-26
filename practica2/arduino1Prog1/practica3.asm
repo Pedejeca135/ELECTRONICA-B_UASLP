@@ -39,6 +39,7 @@ START:
  SBIC $0012, 1
  JMP DOS
 
+
  CPI r16, 0x03
  LDS r18, $005F
  SBIC $0012, 1
