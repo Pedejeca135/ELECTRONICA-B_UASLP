@@ -62,6 +62,8 @@ comp:
  poping:
  CPI r21,0xFF // comparacion de bandera para aver si la pila esta vacia
  BREQ start // Si sí, salta a inicio 
+ ;;; la siguiente linea es la unica que cambia en la
+ ;;; implementacion de la fila con respecto al programa a)
  LD r17,Y+ // pone el valor de la direccion y en r17 y baja el valor de la direccion en y
  STS $002B,r17 // muestra en puerto D el valor obtenido del pop
  JMP rompe // salto a etiqueta
