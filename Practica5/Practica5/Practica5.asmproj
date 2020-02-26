@@ -69,6 +69,12 @@
     <Compile Include="main.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Practica5_a.asm">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Practica5_b.asm">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Assembler.targets" />
 </Project>
