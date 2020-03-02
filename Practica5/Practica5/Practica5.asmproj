@@ -15,7 +15,7 @@
     <Name>Practica5</Name>
     <RootNamespace>Practica5</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\Practica5_a.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\Practica5_b.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
