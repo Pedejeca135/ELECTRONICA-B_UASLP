@@ -16,12 +16,12 @@ iv. El cuarto push-button termina el programa y apaga todos los leds
 
  */ 
 
- LDI r16, 0x00 //Cargar el valor 0x00 en el registro 16
- STS DDRB,r16 // asignando 0x00 del registro 16 a el registro de direcciones del puerto B(output).
- STS DDRD, r16 //Asignando el valor de r16 a la direccion de DDRD($002A) para hacer al Puerto D salidas
+ LDI r16, 0xFF //Cargar el valor 0x00 en el registro 16
+ STS $0024,r16 // asignando 0x00 del registro 16 a el registro de direcciones del puerto B(output).
+ STS $002A, r16 //Asignando el valor de r16 a la direccion de DDRD($002A) para hacer al Puerto D salidas
 
- LDI r16, 0xFF
- STS DDRC, r16
+ LDI r16, 0x00
+ STS $0027, r16
  
  JMP RESET
 
@@ -30,17 +30,16 @@ START:
 MOV r23,r21//copia registros r21 a r23
 MOV r22,r20//copia registro r20 a r22
 
-
  LDS r16, $0026 //$0026Cargamos al registro 16 el valor del puerto C (I/O register).
 
  SBRC r16,0//skip if bit is clear.
- JMP PAUSE
-
- SBRC r16,1//skip if bit is clear.
  JMP RESET
 
- SBRC r16,2//skip if bit is clear.
+ SBRC r16,1//skip if bit is clear.
  JMP COMPLEMENTO_PUSH
+
+ SBRC r16,2//skip if bit is clear.
+ JMP PAUSE
 
  SBRC r16,3//skip if bit is clear.
  JMP  END 
@@ -52,7 +51,8 @@ MOV r22,r20//copia registro r20 a r22
  STS $002B, r20//pone el puerto D.
 
  DESPUES_DE_ASIGNAR:
-/*  DELAY_500MS:
+ 
+  DELAY_500MS:
   LDI r18,41
   LDI r17,150
   LDI r23,128
@@ -63,8 +63,7 @@ MOV r22,r20//copia registro r20 a r22
 	BRNE L1
 	DEC r18
 	BRNE L1
-	JMP DELAY_500MS
-	*/
+	
 
  CPI r20,0b1000_0000
  BREQ PAPA_CALIENTE
@@ -102,8 +101,9 @@ MOV r22,r20//copia registro r20 a r22
   CPI r16, 0x00 // Compara si ya se dejaron de aplanar
   BRNE PAUSE // salto a pause
 CONTINUA_PAUSA:
+
  LDS r16, $0026 //$0026Cargamos al registro 16 el valor del puerto C (I/O register).
- SBRS r16,0//skip if bit is set.
+ SBRS r16,2//skip if bit is set.
  JMP CONTINUA_PAUSA
  JMP START
 
@@ -129,5 +129,5 @@ CONTINUA_PAUSA:
  END:
  JMP END
 
- SBIS $0010, 4	// Skip if Bit in I/O Register is Set(1) para que siga buscando
- JMP START
+// SBIS $0010, 4	// Skip if Bit in I/O Register is Set(1) para que siga buscando
+ //JMP START
