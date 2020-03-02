@@ -34,7 +34,6 @@ LDI r29, 0x01 //parte de la direccion en alto para y
 LDI r22, 0xFF// para prender todos los leds
 
 start:
-
 LDI r21,0x00 // bandera de control de de pila vacia
 
 LDS r17, $0023 // lectura de los 6 bits mas significativos
@@ -45,7 +44,6 @@ LSL r17 // desplazamiento a la izquierda del registro 17
 LSL r17 // segundo desplazamiento a la izquierda del registro 17
 ANDI r18, 0b0000_0011 // enmascaramiento para los bits menos significativos 
 ADD r17,r18 // suma de los 8 bits de entrada
-
 
 CP r27, r29 // comparacion si x y Y apuntan a la misma direccion en alto 
 BREQ comp // salto si son iguales

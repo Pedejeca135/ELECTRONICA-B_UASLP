@@ -42,7 +42,7 @@ MOV r22,r20//copia registro r20 a r22
  JMP PAUSE
 
  SBRC r16,3//skip if bit is clear.
- JMP  END 
+ JMP  BEFORE_END
 
  CPI r24,0x01//checa que este habilitado el complemento.
  BREQ COMPLEMENTO
@@ -125,6 +125,12 @@ CONTINUA_PAUSA:
  CLR_COMP:
  LDI r24, 0x00
  JMP ROMPE
+
+ BEFORE_END:
+ LDI r17,0x00
+ STS $002B,r17
+ STS $0025 ,r17
+ JMP END
 
  END:
  JMP END
