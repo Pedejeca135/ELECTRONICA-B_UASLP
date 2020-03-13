@@ -9,14 +9,14 @@ que se presione el push-button de salida, el dato que se elimine de la pila y se
 sea el menor de los datos restantes.
 
  */ 
-
+//definiciones de nombres para registros. 
  .def full_FF = r25 
- .def menor = r16
- .def menorL = r23
- .def menorH = r24 
- .def consulta = r20 
+ .def menor = r16// para el valor menor
+ .def menorL = r23//para la parte baja de la direccion donde se encontro el numero menor.
+ .def menorH = r24 //parte alta de la direccion donde se encuentra el menor
+ .def consulta = r20 //registro para el valor de consulta en el recorrido.
 
-LDI full_FF, 0xFF
+LDI full_FF, 0xFF//se asigna el valor maximo al registro full_FF.
 LDI r17, 0x00 // se carga el registro 17 con 0´s
 STS $0027,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto c para configurarlos como inputs   Data direction register 
 
@@ -64,47 +64,51 @@ comp:
  JMP pushing // salta
  JMP start // salto a inicio
 
- sta:
+ sta:// para alcanzar la insruccion de vuelta al inicio.(no lo mas optimo pero funciona).
  JMP start
 
-  poping:
+  poping://haciendo pop.
  CPI r21,0xFF // comparacion de bandera para aver si la pila esta vacia
  BREQ start // Si sí, salta a inicio 
- ;;; la siguiente linea es la unica que cambia en la
- ;;; implementacion de la fila con respecto al programa a)
- LDI menor, 0xFF
- MOV r30,r28
- MOV r31,r29
+ LDI menor, 0xFF//se inicializa el valor del menor a FF antes del while.
+ MOV r30,r28//copiar la direccion de Y a Z para empezar el ciclo en bajo
+ MOV r31,r29// "" en alto.
 
- ciclo_while_poping:
-CP r31, r27 // comparacion si x y Y apuntan a la misma direccion en alto 
+ ciclo_while_poping://empieza el "ciclo while".
+CP r31, r27 // comparacion si X y Z apuntan a la misma direccion en alto 
 BREQ comp_while // salto si son iguales
-JMP ciclo_while_continue // salto
-comp_while:
-CP r30,r26 // comparacion si x y Y apuntan a la misma direccion en bajo
-BREQ Termina_while // salto si son iguales
-ciclo_while_continue:
-LD consulta,Z
-CP consulta,menor
+JMP ciclo_while_continue // si son diferentes continua en el ciclo
+comp_while://continua la comparacion.
+CP r30,r26 // comparacion si X y Z apuntan a la misma direccion en bajo
+BREQ Termina_while // salto si son iguales. quiere decir que ya se recorrio toda la pila.
+ciclo_while_continue://continua el ciclo.
+LD consulta,Z//se carga el valor de la direccion a la que apunta Z en consulta.
+CP consulta,menor//compara el valor de consulta con el valor menor(al momento).
 //brinca si es menor
-BRLO if_consulta_menor_true
-LD consulta,Z+
-JMP ciclo_while_poping
+BRLO if_consulta_menor_true//si consulta es menor que el valor menor brinca.
+LD consulta,Z+//solo para el aumento de Z
+JMP ciclo_while_poping//regresa alinicio del ciclo.
 
+//despues del ciclo las asignaciones correspondientes.
  Termina_while:
+ //Z apuntara a la direccion donde se encontro el menor para sobreescribirlo con FF
  MOV r30,menorL
  MOV r31,menorH
+
  MOV r17,menor // pone el valor de la direccion Z en r17 
- STS $002B,r17//asignar elvalor del registro menor a la salida del puerto D // muestra en puerto D el valor obtenido del pop
- ST Z,full_FF
+ STS $002B,r17//asignar elvalor del registro 17 menor a la salida del puerto D.
+ ST Z,full_FF//se asigna FF a la direccion del menor encontrado.
  JMP rompe // salto a etiqueta
 
- //subrutina if(consulta<menor)
+ //subrutina if(consulta<menor)-> entra.
  if_consulta_menor_true:
- MOV menor,consulta
+ MOV menor,consulta//copia el valor de consulta en menor.
+ //cambia la direccion de Z con la del menor encontrado.
  MOV menorH,r31
  MOV menorL,r30
+ //se avanza el valor de Z para seguir recorriendo la pila
  LD consulta,Z+
+ //regresa al ciclo.
  JMP ciclo_while_poping
 
  pushing:
