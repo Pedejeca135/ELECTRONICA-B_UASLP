@@ -8,10 +8,7 @@ b) Desarrolle el programa de manera que requiera de un código de 4 dígitos _____
 proporcionado por el instructor, para ser activado/desactivado. Al estar “desactivado” el
 dispositivo, al presionar alguna tecla, el display de siete segmentos parpadeará
 repetidamente. Al estar “activado”, tendrá la funcionalidad del inciso a).
-(30% - Opcional)
-
-
-
+(30% - Opcional).
  */
 
  .def rotacion = r21  ;Registro de rotacion.
@@ -21,6 +18,10 @@ repetidamente. Al estar “activado”, tendrá la funcionalidad del inciso a).
  .def mapeoR =  r25 ;
  .def salida = r17;registro de salida.
  .def alto = r10;
+ //.def secuenciaR = r26;
+ //.def banderaPass = r27;
+ LDI r27, 0x00;
+ LDI r27,0x00
 
  LDI rotacion,0x01
 
@@ -56,7 +57,7 @@ L1: dec  r20
  RET
 
  FILA_VERIFY:
-CALL DELAY_BUTTON;
+ CALL DELAY_BUTTON;de cajon un delay para cuando se aprieta un boton.
  MOV fila, lectura;mueve la lectura de fila en el registro fila.
  ANDI fila,0x0F;
  LDI rotacion, 0x01//reinicia la rotacion
@@ -113,28 +114,59 @@ CALL DELAY_BUTTON;
 
   UNO:
   LDI salida,0x06
+  LDI r26, 0x00;
   JMP ASIGNA
+
   DOS:
   LDI salida,0x5B
+  LDI r26, 0x00;
   JMP ASIGNA
+
   TRES:
   LDI salida,0x4F
+
+  SBRC r26,2
+  LSL r26
+
   JMP ASIGNA
+
   A:
   LDI salida,0x77
+  LDI r26, 0x00;
   JMP ASIGNA
   CUATRO:
   LDI salida,0x66
+
+  SBRC r26,0
+  LSL r26
+
   JMP ASIGNA
   CINCO:
   LDI salida,0x6D
+  LDI r26, 0x00;
   JMP ASIGNA
   SEIS:
   LDI salida,0x7D
+  LDI r26, 0x00;
   JMP ASIGNA
   B:
   LDI salida,0x7C
+
+  SBRC r26,1
+  LSL r26
+
   JMP ASIGNA
+  
+  BLINK_BLINK:
+  LDI salida,0x80
+  STS $002B, salida  
+  CALL DELAY_BLINK
+  LDI salida,0x00
+  STS $002B, salida 
+  CALL DELAY_BLINK
+
+
+
   
   ROMPE:
   LDS lectura, $0023
@@ -144,9 +176,23 @@ CALL DELAY_BUTTON;
   JMP ROMPE
 
   ASIGNA:
+  SBRC r27,0
   STS $002B, salida
+
+  SBRS r27,0;
+  CALL BLINK_BLINK;
+  ANDI r26, 0x0F 
+
+  SBRC r26,3
+  CALL CHANGE_PASSWORD
+
   JMP ROMPE
   JMP TO_START
+
+  CHANGE_PASSWORD:
+  COM r26
+  ANDI r27, 0x01
+  RET
 
   MAPEO2:
   CPI mapeoR, 0b0001_0100
@@ -168,27 +214,35 @@ CALL DELAY_BUTTON;
 
   SIETE:
   LDI salida,0x07
+  LDI r26, 0x00;
   JMP ASIGNA
   OCHO:
   LDI salida,0x7F
+  LDI r26, 0x00;
   JMP ASIGNA
   NUEVE:
   LDI salida,0x6F
+  LDI r26, 0x00;
   JMP ASIGNA
   C:
   LDI salida,0x39
+  LDI r26, 0x00;
   JMP ASIGNA
   ASTERIX:
   LDI salida,0x79
+  LDI r26, 0x00;
   JMP ASIGNA
   CERO:
   LDI salida,0x3F
+  LDI r26, 0x00;
   JMP ASIGNA
   GATO:
   LDI salida,0x71
+  LDI r26, 0x00;
   JMP ASIGNA
   D:
   LDI salida,0x5E
+  LDI r26, 0x01;
   JMP ASIGNA
 
 
