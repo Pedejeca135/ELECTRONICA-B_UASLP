@@ -11,10 +11,12 @@
  .def fila = r24 ;
  .def mapeoR =  r25 ;
  .def salida = r17;registro de salida.
+ .def alto = r10;
 
  LDI rotacion,0x01
 
  LDI r16, 0xFF ;outputs
+ MOV alto, r16;pone todos en alto en el registro alto(r26)
  STS $0027, r16;port C
  STS $002A,r16 ;port D
 
@@ -22,6 +24,7 @@
  STS $0024, r16; port B
 
  START:
+ STS $0028, alto;pone todos en alto en la salda del puerto c.
  LDS lectura, $0023;da el valor del puerto B(REgnlones(rows)).
  ANDI lectura, 0x0F;
  CPI lectura, 0x01;
@@ -44,16 +47,17 @@ L1: dec  r20
  RET
 
  FILA_VERIFY:
-//CALL DELAY_BUTTON;
+CALL DELAY_BUTTON;
  MOV fila, lectura;mueve la lectura de fila en el registro fila.
+ ANDI fila,0x0F;
  LDI rotacion, 0x01//reinicia la rotacion
  JMP COLUM_VERIFY
  JMP MATRIX_VERIFY
 
  COLUM_VERIFY:
- SBRC rotacion,3//si el registro de rotacion esta en alto en el bit 3
+ SBRC rotacion,4//si el registro de rotacion esta en alto en el bit 3
  LDI rotacion, 0x01//reinicia la rotacion 
- STS $0027, rotacion;puerto c, tiene el valor del registro de rotacion.
+ STS $0028, rotacion;puerto c, tiene el valor del registro de rotacion.
  LDS lectura, $0023//da el valor del puerto B(REgnlones(rows)).
  ANDI lectura, 0x0F; 
  CPI lectura, 0x01
@@ -63,6 +67,7 @@ L1: dec  r20
 
  MATRIX_VERIFY:
   MOV columna,rotacion;
+  ANDI columna, 0x0F;
   MOV mapeoR,columna;
   LSL mapeoR;-
   LSL mapeoR;
@@ -94,7 +99,7 @@ L1: dec  r20
   JMP MAPEO2
   
   START_CITO:
-  //CALL DELAY_BUTTON
+  CALL DELAY_BUTTON
   JMP START
 
   UNO:
@@ -107,7 +112,7 @@ L1: dec  r20
   LDI salida,0x4F
   JMP ASIGNA
   A:
-  LDI salida,0x06
+  LDI salida,0x77
   JMP ASIGNA
   CUATRO:
   LDI salida,0x66
@@ -119,7 +124,7 @@ L1: dec  r20
   LDI salida,0x7D
   JMP ASIGNA
   B:
-  LDI salida,0x06
+  LDI salida,0x7C
   JMP ASIGNA
   
   ROMPE:
