@@ -165,8 +165,18 @@ L1: dec  r20
   STS $002B, salida 
   CALL DELAY_BLINK
 
-
-
+  
+DELAY_BLINK:;DElay 500 ms
+    ldi  r18, 41
+    ldi  r19, 150
+    ldi  r20, 128
+L1_DBLINK: dec  r20
+    brne L1_DBLINK
+    dec  r19
+    brne L1_DBLINK
+    dec  r18
+    brne L1_DBLINK
+	RET
   
   ROMPE:
   LDS lectura, $0023
