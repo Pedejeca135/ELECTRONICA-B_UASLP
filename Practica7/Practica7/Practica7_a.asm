@@ -3,6 +3,17 @@
  *
  *  Created: 3/12/2020 1:53:52 PM
  *   Author: pjco9
+
+ Objetivo:
+a)Escriba un programa en ensamblador para el microcontrolador Atmega 328p que lea un
+teclado matricial de 4x4 por alguno de sus puertos, posteriormente, muestre la tecla
+oprimida en un display de 7 segmentos. Considere los valores “0” a “F” hexadecimal
+para cada tecla (elimine los rebotes generados al oprimir una tecla por software).
+(40% - Obligatorio).
+
+
+
+
  */ 
 
  .def rotacion = r21  ;Registro de rotacion.

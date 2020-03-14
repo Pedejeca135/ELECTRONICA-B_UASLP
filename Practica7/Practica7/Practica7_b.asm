@@ -3,6 +3,15 @@
  *
  *  Created: 3/12/2020 1:54:25 PM
  *   Author: pjco9
+
+b) Desarrolle el programa de manera que requiera de un código de 4 dígitos ________,
+proporcionado por el instructor, para ser activado/desactivado. Al estar “desactivado” el
+dispositivo, al presionar alguna tecla, el display de siete segmentos parpadeará
+repetidamente. Al estar “activado”, tendrá la funcionalidad del inciso a).
+(30% - Opcional)
+
+
+
  */
 
  .def rotacion = r21  ;Registro de rotacion.
