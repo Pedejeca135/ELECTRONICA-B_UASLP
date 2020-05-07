@@ -12,21 +12,22 @@ repetidamente. Al estar “activado”, tendrá la funcionalidad del inciso a).
  */
 
  .def rotacion = r21  ;Registro de rotacion.
+ ;.def codigo = r21; contraseña
+
  .def lectura = r22  ; registro de lectura.
- .def columna = r23 ;
- .def fila = r24 ;
+ .def columna = r23 ; registro que representa la entrada en columna.
+ .def fila = r24 ; registro que representa la fila.
  .def mapeoR =  r25 ;
  .def salida = r17;registro de salida.
  .def alto = r10;
  //.def secuenciaR = r26;
  //.def banderaPass = r27;
  LDI r27, 0x00;
- LDI r27,0x00
 
  LDI rotacion,0x01
 
  LDI r16, 0xFF ;outputs
- MOV alto, r16;pone todos en alto en el registro alto(r26)
+ MOV alto, r16;pone todos en alto en el registro alto(r16)
  STS $0027, r16;port C
  STS $002A,r16 ;port D
 
@@ -108,9 +109,7 @@ L1: dec  r20
   BREQ B;
   JMP MAPEO2
   
-  START_CITO:
-  CALL DELAY_BUTTON
-  JMP START
+
 
   UNO:
   LDI salida,0x06
@@ -124,10 +123,8 @@ L1: dec  r20
 
   TRES:
   LDI salida,0x4F
-
   SBRC r26,2
   LSL r26
-
   JMP ASIGNA
 
   A:
@@ -136,10 +133,8 @@ L1: dec  r20
   JMP ASIGNA
   CUATRO:
   LDI salida,0x66
-
   SBRC r26,0
   LSL r26
-
   JMP ASIGNA
   CINCO:
   LDI salida,0x6D
@@ -151,24 +146,46 @@ L1: dec  r20
   JMP ASIGNA
   B:
   LDI salida,0x7C
-
   SBRC r26,1
   LSL r26
-
   JMP ASIGNA
+
+
+    START_CITO:
+  CALL DELAY_BUTTON
+  JMP START
   
   BLINK_BLINK:
-  LDI salida,0x80
+  LDI salida,0xFF
   STS $002B, salida  
   CALL DELAY_BLINK
   LDI salida,0x00
   STS $002B, salida 
   CALL DELAY_BLINK
-
+  LDI salida,0xFF
+  STS $002B, salida  
+  CALL DELAY_BLINK
+  LDI salida,0x00
+  STS $002B, salida 
+  CALL DELAY_BLINK
+   LDI salida,0xFF
+  STS $002B, salida  
+  CALL DELAY_BLINK
+  LDI salida,0x00
+  STS $002B, salida 
+  CALL DELAY_BLINK
+  RET
   
+    ROMPE:
+  LDS lectura, $0023
+  ANDI lectura, 0x0F
+  CPI lectura,0x00
+  BREQ START_CITO
+  JMP ROMPE
+
 DELAY_BLINK:;DElay 500 ms
-    ldi  r18, 41
-    ldi  r19, 150
+    ldi  r18, 21;41
+    ldi  r19, 50;150
     ldi  r20, 128
 L1_DBLINK: dec  r20
     brne L1_DBLINK
@@ -178,30 +195,27 @@ L1_DBLINK: dec  r20
     brne L1_DBLINK
 	RET
   
-  ROMPE:
-  LDS lectura, $0023
-  ANDI lectura, 0x0F
-  CPI lectura,0x00
-  BREQ START_CITO
-  JMP ROMPE
 
-  ASIGNA:
-  SBRC r27,0
+
+  ASIGNA:  
+  SBRC r27,0;  
   STS $002B, salida
-
-  SBRS r27,0;
+  SBRS r27,3
   CALL BLINK_BLINK;
+  
+    
   ANDI r26, 0x0F 
-
   SBRC r26,3
   CALL CHANGE_PASSWORD
-
   JMP ROMPE
   JMP TO_START
 
   CHANGE_PASSWORD:
-  COM r26
-  ANDI r27, 0x01
+  LDI r26, 0x00;
+  COM r27
+
+  
+
   RET
 
   MAPEO2:
@@ -252,8 +266,9 @@ L1_DBLINK: dec  r20
   JMP ASIGNA
   D:
   LDI salida,0x5E
-  LDI r26, 0x01;
+  LDI r26, 0x01; hehehei
   JMP ASIGNA
+
 
 
 
