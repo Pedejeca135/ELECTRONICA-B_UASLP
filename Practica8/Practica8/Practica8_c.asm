@@ -1,23 +1,21 @@
- /*
- * practica8_a.asm
+/*
+ * Practica8_c.asm
  *
- *  Created: 5/12/2020 3:16:30 PM
+ *  Created: 5/12/2020 9:57:24 PM
  *   Author: pjco9
+ Objetivo:
 
-  Objetivo:
-
-a)Modifique el programa de la práctica 4, inciso a), de manera que el dato que se toma y almacena  en  
-RAM  es  proveniente  del  ADC  del  ATmega328P.  El push-button  para ingresar datos será reemplazado 
-por la señal proveniente del circuito del fototransistor, y el push-button de salida eliminará sus 
-rebotes por software. Utilice solamente los 8 bits más significativos del ADC. Una vez que se almacenó 
-en lamemoria RAM, con el botón de salida se mostrarán los8 bits más significativosen 8 puntas de prueba.
-(20% -Obligatorio).
+c)Desarrolle un programa el cual simulará una barra de audio,en 14puntas de prueba,teniendo 
+como entrada el potenciómetro como divisor de voltaje.Si la entrada del ADC no  tiene  
+diferencia  de  potencial  con  respecto  a  el  voltaje  en  el  pin  AREF,  todas  
+las puntas de prueba estarán prendidas.Si no tiene diferencia de potencial con respectoa 
+GND del ATmega328P, todas las puntas estarán apagadas.(30% -Opcional)
 
  */ 
 .def control = r16
 
 // -------- PILA -------- //
-LDI r17, 0x00 // se carga el registro 17 con 0´s
+//LDI r17, 0x00 // se carga el registro 17 con 0´s
 //STS $0027,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto c para configurarlos como inputs   Data direction register 
 
 STS $0024,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto b para configurarlos como inputs
