@@ -268,11 +268,3 @@ L1_DBLINK: dec  r20
   LDI salida,0x5E
   LDI r26, 0x01; hehehei
   JMP ASIGNA
-
-
-
-
-
-
-
-

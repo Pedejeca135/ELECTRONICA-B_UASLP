@@ -192,10 +192,3 @@ CALL DELAY_BUTTON;
   D:
   LDI salida,0x5E
   JMP ASIGNA
-
-
-
-
-
-
-
