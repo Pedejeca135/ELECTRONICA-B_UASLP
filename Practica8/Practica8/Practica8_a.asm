@@ -14,14 +14,12 @@ en lamemoria RAM, con el botón de salida se mostrarán los8 bits más significativ
 (20% -Obligatorio).
 
  */ 
+
 .def control = r16
 
 // -------- PILA -------- //
 LDI r17, 0x00 // se carga el registro 17 con 0´s
-//STS $0027,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto c para configurarlos como inputs   Data direction register 
-
 STS $0024,r17 // se asigna el valor del registro a una direccion de memoria del registro del puerto b para configurarlos como inputs
-
 LDI r18,0xFF // se carga el registro 18 con 1´s
 STS $002A, r18 // se asigna el valor del registro 18 al puerto D para configurarlos como outputs
 
@@ -35,14 +33,17 @@ LDI r22, 0xFF// para prender todos los leds
 
 
 // ----------------------- ADC ---------------------//
+LDI control, 0x00
+sts $0064,control
 LDI control, 0x20
 STS $007C, control
 LDI control, 0x87
 STS $007A, control
 LDI control, 0xC7 // para realizar la conversion se pone la siguiente palabra de control 1100 0111 y hacer la conversion
 // -------------------END ADC -----------------------//
-LDI r17, 0x01
-LDI r18, 0x01
+prende_leds:
+ STS $002B, r22 // datos de salida a puerto D 
+
 start:
 LDI r21,0x00 // bandera de control de de pila vacia
 LDS r19, $0023 // lee las signals del puerto b
@@ -52,14 +53,13 @@ BREQ comp // salto si son iguales
 JMP Operacion_pila // salto
 comp:
  CP r26,r28 // comparacion si x y Y apuntan a la misma direccion en bajo
- BREQ prende_leds // salto si son iguales
+ BREQ cambia_band // salto si son iguales
  JMP Operacion_pila // salto
 
- prende_leds:
-  STS $002B, r22 // datos de salida a puerto D 
+ cambia_band:
   LDI r21,0xFF // registro para saber si esta vacia la pila
-// ------------- END PILA VACIA ---------------//
 
+// ------------- END PILA VACIA ---------------//
  Operacion_pila:
  SBRC r19,1 // indica si en el bit 2 del r19 esta en alto (pop)
  JMP poping // salta 
@@ -69,14 +69,22 @@ comp:
 
  poping:
  CPI r21,0xFF // comparacion de bandera para aver si la pila esta vacia
- BREQ start // Si sí, salta a inicio 
+ BREQ prende_leds // Si sí, salta a inicio 
  LD r17,-X // pone el valor de la direccion x en r17 y baja el valor de la direccion en x 
  STS $002B,r17 // muestra en puerto D el valor obtenido del pop
  JMP rompe // salto a etiqueta
 
+ 
  pushing:
-  //ADD r17,r18
-  STS $007A,control;
+  STS $007A, control
+ 
+ conversion:
+  LDS r31, $007A
+  SBRS r31, 6
+  jmp pushing2
+  jmp conversion
+  `
+ pushing2:
   LDS r17,$0079//ADCH
   ST X+,r17 // hace un push a la pila 
   JMP rompe // salto a etiqueta

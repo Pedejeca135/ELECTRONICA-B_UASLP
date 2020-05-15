@@ -15,7 +15,7 @@
     <Name>Practica8</Name>
     <RootNamespace>Practica8</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <EntryFile>$(MSBuildProjectDirectory)\Practica8_a.asm</EntryFile>
+    <EntryFile>$(MSBuildProjectDirectory)\Practica8_b.asm</EntryFile>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
@@ -80,6 +80,9 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="aux_b.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="main.asm">
       <SubType>Code</SubType>
     </Compile>
