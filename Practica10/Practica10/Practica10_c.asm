@@ -1,12 +1,9 @@
-;
-; practica 10 labo 3.asm
-;
-; Created: 23/5/2020 14:21:15
-; Author : Pablo
-;
-
-
-; Replace with your application code
+/*
+ * Practica10_a.asm
+ *
+ *  Created: 5/25/2020 5:47:44 AM
+ *   Author: pjco9
+ */ 
 
 .org 0x00 
 jmp conf_sist
