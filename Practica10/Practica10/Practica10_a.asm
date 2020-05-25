@@ -1,10 +1,10 @@
 /*
  * Practica10_a.asm
  *
- *  Created: 5/25/2020 5:47:44 AM
+ *  Created: 5/25/2020 6:26:27 AM
  *   Author: pjco9
  */ 
-.org 0x00 
+ .org 0x00 
 jmp conf_sist
  .org 0x001E //direccion de TIMER0_COMPB 
 jmp MANEJO_TIMER0_B  

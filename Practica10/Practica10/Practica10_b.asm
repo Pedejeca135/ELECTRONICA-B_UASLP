@@ -1,9 +1,10 @@
 /*
  * Practica10_b.asm
  *
- *  Created: 5/25/2020 5:48:07 AM
+ *  Created: 5/25/2020 6:26:54 AM
  *   Author: pjco9
  */ 
+
  .org 0x00
 jmp conf_sist
 .org 0x002A //direccion del vector de interrupcion del ADC.
