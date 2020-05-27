@@ -3,6 +3,13 @@
  *
  *  Created: 5/25/2020 6:26:54 AM
  *   Author: pjco9
+
+ b) Objetivo: Desarrolle un programa el cual configurará el ADC del ATmega328P para utilizar
+interrupciones internas. Un push-button (eliminar rebotes por software) mandará una
+señal para indicar el inicio de conversión. Una vez terminada la conversión, se generará
+una interrupción interna y su subrutina de manejo mostrará el resultado por 8 puntas de
+prueba.
+(20% - Obligatorio)
  */ 
 
  .org 0x00

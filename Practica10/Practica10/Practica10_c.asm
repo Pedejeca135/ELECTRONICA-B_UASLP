@@ -3,6 +3,12 @@
  *
  *  Created: 5/25/2020 5:47:44 AM
  *   Author: pjco9
+ c) objetivo:Combine los programas de los incisos a) y b) de manera que cada vez que el contador
+genere su interrupción, se inicie una conversión en el ADC. Cada vez que el ADC
+termine la conversión y genere su interrupción interna, se mostrará el resultado en 8
+puntas de prueba y se reiniciará el contador. El contador obtendrá su señal de un reloj
+externo de 1hz.
+(30% - Opcional)
  */ 
 
 .org 0x00 
@@ -35,10 +41,12 @@ ldi led, 0x00
 
 //configuracion del puerto b y d 
 LDI conf, 0xFF 
-sts $0024, conf
-//sts $0027, conf
- LDI conf, 0x00 
-STS $002A, conf 
+sts $0024, conf//port b salidas
+//sts $0027, conf//portc salidas
+LDI conf, 0x30
+STS $0027, conf//solo los bits mas significativos
+LDI conf, 0x00 
+STS $002A, conf //portd salidas
 
 
  // configuracion de interrupcion interna 
@@ -81,10 +89,8 @@ ADC_INTERRUPT: //etiqueta para la interrupcion del ADC.
 LDS r31, $0079
 
 MOV r30,r31
-LSL r30
-LSL r30
-LSL r30
-LSL r30
+LSR r30
+LSR r30
 ANDI r30, 0b0011_0000
 LSR r31
 LSR r31
