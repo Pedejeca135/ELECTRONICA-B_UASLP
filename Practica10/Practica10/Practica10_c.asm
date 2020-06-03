@@ -1,5 +1,5 @@
 /*
- * Practica10_a.asm
+ * Practica10_c.asm
  *
  *  Created: 5/25/2020 5:47:44 AM
  *   Author: pjco9
